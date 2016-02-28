@@ -1,5 +1,8 @@
 package me.recruit.recruitme;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +18,16 @@ public class Candidate {
 	private String linkedIn;
 	private List<String> portfolioURLs;
 	private String pictureURL;
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	private String comments;
 
 	public Candidate() {
 		portfolioURLs = new ArrayList<>();
@@ -95,4 +108,27 @@ public class Candidate {
 		this.firstName = firstName;
 	}
 
+	public String toBaseString() {
+		JSONObject candidateJSON = new JSONObject();
+		try {
+			candidateJSON.put(JSONParser.FIRST_NAME, firstName);
+			candidateJSON.put(JSONParser.LAST_NAME, lastName);
+			candidateJSON.put(JSONParser.TITLE, title);
+			candidateJSON.put(JSONParser.EMAIL, email);
+			candidateJSON.put(JSONParser.LOCATION, location);
+			candidateJSON.put(JSONParser.RESUME, resume);
+			candidateJSON.put(JSONParser.LINKEDIN, linkedIn);
+			candidateJSON.put(JSONParser.PORTFOLIO_URLS, portfolioURLs);
+			candidateJSON.put(JSONParser.PICTURE_URL, pictureURL);
+			candidateJSON.put(JSONParser.COMMENTS, comments);
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return candidateJSON.toString();
+	}
+
+	public String getName() {
+		return firstName + " " + lastName;
+	}
 }

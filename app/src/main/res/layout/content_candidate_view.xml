@@ -19,24 +19,24 @@
         android:layout_centerHorizontal="true"/>
 
     <TextView
-        android:id = "@+id/name"
+        android:id = "@+id/cardName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/profilepicture"
         android:layout_centerHorizontal="true"/>
 
     <TextView
-        android:id = "@+id/title"
+        android:id = "@+id/cardTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/name"
+        android:layout_below="@id/cardName"
         android:layout_centerHorizontal="true"/>
 
     <TextView
         android:id = "@+id/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/title"
+        android:layout_below="@id/cardTitle"
         android:layout_centerHorizontal="true"/>
 
     <TextView
@@ -58,6 +58,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/linkedin"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:id="@+id/comments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/resume"
         android:layout_centerHorizontal="true"/>
 
 

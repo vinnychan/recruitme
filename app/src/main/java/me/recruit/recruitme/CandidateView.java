@@ -9,15 +9,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 public class CandidateView extends AppCompatActivity {
+    private Candidate candidate = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +36,10 @@ public class CandidateView extends AppCompatActivity {
 
 		String result = getIntent().getStringExtra("RESULT_TEXT");
 
-		Candidate candidate = JSONParser.parse(result);
+        candidate = JSONParser.parse(result);
 
-		TextView name = (TextView) findViewById(R.id.name);
-		TextView title = (TextView) findViewById(R.id.title);
+		TextView name = (TextView) findViewById(R.id.cardName);
+		TextView title = (TextView) findViewById(R.id.cardTitle);
 		TextView location = (TextView) findViewById(R.id.location);
 		TextView email = (TextView) findViewById(R.id.email);
 		TextView linkedin = (TextView) findViewById(R.id.linkedin);
@@ -86,8 +85,11 @@ public class CandidateView extends AppCompatActivity {
 			return true;
 		}
         else if (id == R.id.action_save) {
-//            DatabaseUtil dbUtil = new DatabaseUtil(getApplicationContext());
-//            dbUtil.addCandidate(dbUtil.getWritableDatabase(), );
+            EditText comments = (EditText) findViewById(R.id.comments);
+            candidate.setComments(comments.getText().toString());
+            String candidateJSON = candidate.toBaseString();
+            DatabaseUtil dbUtil = new DatabaseUtil(getApplicationContext());
+            dbUtil.addCandidate(dbUtil.getWritableDatabase(), candidateJSON);
             finish();
         }
 

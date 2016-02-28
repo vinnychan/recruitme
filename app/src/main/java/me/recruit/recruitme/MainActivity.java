@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,11 +15,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String API_URL = "http://justchooseme.azurewebsites.net/";
+    private DatabaseUtil dbUtil;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +38,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-				Intent intent = new Intent(MainActivity.this, ScannerActivity.class);
-				startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, ScannerActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -43,6 +51,25 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        recyclerView = (RecyclerView) findViewById(R.id.candidateRecyclerView);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(llm);
+
+        dbUtil = new DatabaseUtil(getApplicationContext());
+        List<String> candidateList = dbUtil.getCandidatesList(dbUtil.getReadableDatabase());
+
+        View.OnClickListener cardOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView name = (TextView) view.findViewById(R.id.cardName);
+                Snackbar.make(view, name.getText().toString(), Snackbar.LENGTH_LONG);
+            }
+        };
+        CandidateAdapter candidateAdapter = new CandidateAdapter(candidateList, getApplicationContext(), cardOnClickListener);
+        recyclerView.setAdapter(candidateAdapter);
     }
 
     @Override
@@ -103,5 +130,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }
