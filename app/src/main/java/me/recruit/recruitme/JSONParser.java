@@ -6,8 +6,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class JSONParser {
@@ -31,11 +33,28 @@ public class JSONParser {
 			JSONObject jsonObject = new JSONObject(input);
 			candidate.setFirstName(jsonObject.getString(FIRST_NAME));
 			candidate.setLastName(jsonObject.getString(LAST_NAME));
-			candidate.setTitle(jsonObject.getString(TITLE));
+
+			try {
+				candidate.setTitle(jsonObject.getString(TITLE));
+			} catch (JSONException e) {
+				Log.d("JSON_PARSER", "No title  provided");
+			}
+
 			candidate.setEmail(jsonObject.getString(EMAIL));
-			candidate.setLocation(jsonObject.getString(LOCATION));
+
+			try {
+				candidate.setLocation(jsonObject.getString(LOCATION));
+			} catch (JSONException e) {
+				Log.d("JSON_PARSER", "No location  provided");
+			}
+
 			candidate.setResume(jsonObject.getString(RESUME));
-			candidate.setLinkedIn(jsonObject.getString(LINKEDIN));
+
+			try {
+				candidate.setLinkedIn(jsonObject.getString(LINKEDIN));
+			} catch (JSONException e) {
+				Log.d("JSON_PARSER", "No linkedin URL  provided");
+			}
 
 			try {
 				candidate.setPictureURL(jsonObject.getString(PICTURE_URL));
@@ -61,6 +80,45 @@ public class JSONParser {
 		}
 
 		return candidate;
+	}
+
+	public static List<String> parseCandidateList(String input) {
+
+		List<String> result = new ArrayList<>();
+
+		try {
+			JSONObject candidateListJSON = new JSONObject(input);
+			JSONArray candidateArrayJSON = candidateListJSON.getJSONArray("candidates");
+
+			for (int i =0; i < candidateArrayJSON.length(); i++) {
+				result.add(candidateArrayJSON.getJSONObject(i).toString());
+			}
+
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public static List<String> parseCandidateIdList(String input) {
+		List<String> result = new ArrayList<>();
+
+		try {
+			JSONObject candidateListIdJSON = new JSONObject(input);
+			JSONArray candidateArrayJSON = candidateListIdJSON.getJSONArray("candidates");
+
+			for (int i =0; i < candidateArrayJSON.length(); i++) {
+				result.add(candidateArrayJSON.getJSONObject(i).getString("_id"));
+			}
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+
+		return result;
 	}
 
 	public static String parseCandidateName(String input) {

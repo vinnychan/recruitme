@@ -2,10 +2,12 @@ package me.recruit.recruitme;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -77,7 +80,21 @@ public class MainActivity extends AppCompatActivity
 
         CandidateAdapter candidateAdapter = new CandidateAdapter(candidateList, getApplicationContext(), cardCallback);
         recyclerView.setAdapter(candidateAdapter);
-    }
+
+
+
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
+//		try {
+//			HTTPUrlConnection.sendGet();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+
+
+
+	}
 
     @Override
     public void onBackPressed() {

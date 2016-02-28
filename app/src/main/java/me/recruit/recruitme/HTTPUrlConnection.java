@@ -17,11 +17,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 
 
 public class HTTPUrlConnection {
 
 	private static final String POST_URL = "http://justchooseme.azurewebsites.net/candidate/add";
+	private static final String GET_ALL_URL = "http://justchooseme.azurewebsites.net/candidate/listArray";
+
+	private static final String USER_AGENT = "Mozilla/5.0";
 
 	public static void sendJson(final JSONObject json) {
 		Thread t = new Thread() {
@@ -60,6 +66,47 @@ public class HTTPUrlConnection {
 
 		t.start();
 	}
+
+	public static String getAllRequest( ) throws IOException {
+		URL url = new URL(GET_ALL_URL);
+		HttpURLConnection client = (HttpURLConnection) url.openConnection();
+		InputStream in = client.getInputStream();
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		String returnString = br.readLine();
+		client.disconnect();
+		return returnString;
+	}
+
+	public static String sendGet() throws Exception {
+
+		URL obj = new URL(GET_ALL_URL);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		//add request header
+		con.setRequestProperty("User-Agent", USER_AGENT);
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + GET_ALL_URL);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+				new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		//print result
+		return response.toString();
+
+	}
+
 
 	private static String convertInputStreamToString(InputStream inputStream) throws IOException {
 		BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));

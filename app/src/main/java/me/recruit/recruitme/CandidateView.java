@@ -70,7 +70,7 @@ public class CandidateView extends AppCompatActivity {
 		resume.setText(candidate.getResume());
 		portfolio.setText("Portfolio:");
 
-		for (int i = 1; i < candidate.getPortfolioURLs().size(); i++) {
+		for (int i = 1; i < candidate.getPortfolioURLs().size() + 1; i++) {
 			String urlString = "url"+i;
 			int id = getResources().getIdentifier(urlString, "id", getPackageName());
 			if (id != 0) {

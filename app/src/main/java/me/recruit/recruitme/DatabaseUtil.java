@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -84,20 +85,35 @@ public class DatabaseUtil extends SQLiteOpenHelper{
     }
 
     public List[] getCandidatesList(SQLiteDatabase db) {
-        List<String> candidateList = new ArrayList<>();
-        List<String> candidateListIds = new ArrayList<>();
-        String statement = GET_ALL_CANDIDATES;
-        Cursor cursor = db.rawQuery(statement, null);
-        if (cursor.moveToFirst()) {
-            while (cursor.isAfterLast() == false) {
-                String candidateJSON = cursor.getString(cursor.getColumnIndex(COLUMN_CANDIDATE_JSON));
-                candidateList.add(candidateJSON);
-                String candidateId = cursor.getString(cursor.getColumnIndex(COLUMN_ID));
-                candidateListIds.add(candidateId);
-                cursor.moveToNext();
-            }
-        }
-        return new List[] {candidateList, candidateListIds};
+
+		String candidateJSONString = "";
+		List<String> candidateList = new ArrayList<>();
+		List<String> candidateListId = new ArrayList<>();
+
+		try {
+			candidateJSONString = HTTPUrlConnection.sendGet();
+			candidateList = JSONParser.parseCandidateList(candidateJSONString);
+			candidateListId = JSONParser.parseCandidateIdList(candidateJSONString);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
+
+//        List<String> candidateList = new ArrayList<>();
+//        List<String> candidateListIds = new ArrayList<>();
+//        String statement = GET_ALL_CANDIDATES;
+//        Cursor cursor = db.rawQuery(statement, null);
+//        if (cursor.moveToFirst()) {
+//            while (cursor.isAfterLast() == false) {
+//                String candidateJSON = cursor.getString(cursor.getColumnIndex(COLUMN_CANDIDATE_JSON));
+//                candidateList.add(candidateJSON);
+//                String candidateId = cursor.getString(cursor.getColumnIndex(COLUMN_ID));
+//                candidateListIds.add(candidateId);
+//                cursor.moveToNext();
+//            }
+//        }
+        return new List[] {candidateList, candidateListId};
     }
 
     public void updateCandidate(SQLiteDatabase db, String candidateId, String candidateJSON) {
