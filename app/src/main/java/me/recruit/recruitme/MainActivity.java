@@ -17,6 +17,8 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String API_URL = "http://justchooseme.azurewebsites.net/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +70,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_api) {
+            //TODO: remove later
+            String testURL = MainActivity.API_URL + "test";
+            new CallAPI().execute(testURL);
             return true;
         }
 
