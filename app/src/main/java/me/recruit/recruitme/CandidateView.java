@@ -15,6 +15,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
 public class CandidateView extends AppCompatActivity {
     private Candidate candidate = null;
     private String candidateId = "";
@@ -39,6 +43,14 @@ public class CandidateView extends AppCompatActivity {
         candidateId = getIntent().getStringExtra("ID");
 
         candidate = JSONParser.parse(result);
+
+		try {
+			JSONObject resultJson = new JSONObject(result);
+			HTTPUrlConnection.sendJson(resultJson, "http://justchooseme.azurewebsites.net/candidate/add");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
 
 		TextView name = (TextView) findViewById(R.id.cardName);
 		TextView title = (TextView) findViewById(R.id.cardTitle);
