@@ -55,6 +55,10 @@ public class CandidateView extends AppCompatActivity {
 		TextView email = (TextView) findViewById(R.id.email);
 		TextView linkedin = (TextView) findViewById(R.id.linkedin);
 		TextView resume = (TextView) findViewById(R.id.resume);
+		TextView portfolio = (TextView) findViewById(R.id.resume);
+//		TextView url1 = (TextView) findViewById(R.id.url1);
+//		TextView url2 = (TextView) findViewById(R.id.url2);
+//		TextView url3 = (TextView) findViewById(R.id.url3);
         EditText comments = (EditText) findViewById(R.id.comments);
 
 		String candidateName = candidate.getFirstName() + "  " + candidate.getLastName();
@@ -64,6 +68,16 @@ public class CandidateView extends AppCompatActivity {
 		location.setText(candidate.getLocation());
 		linkedin.setText(candidate.getLinkedIn());
 		resume.setText(candidate.getResume());
+		portfolio.setText("Portfolio:");
+
+		for (int i = 1; i < candidate.getPortfolioURLs().size(); i++) {
+			String urlString = "url"+i;
+			int id = getResources().getIdentifier(urlString, "id", getPackageName());
+			if (id != 0) {
+				TextView textView = (TextView) findViewById(id);
+				textView.setText(candidate.getPortfolioURLs().get(i-1));
+			}
+		}
 
         ImageView imageView = (ImageView) findViewById(R.id.profilepicture);
 

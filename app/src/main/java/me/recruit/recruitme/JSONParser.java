@@ -2,6 +2,7 @@ package me.recruit.recruitme;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,17 +43,17 @@ public class JSONParser {
 //				candidate.setPictureURL("http://augustyniakteam.com/wp-content/uploads/2015/01/Default_User.png");
 				Log.d("JSON_PARSER", "No image URL provided");
 			}
-			candidate.setComments(jsonObject.getString(COMMENTS));
 
-			JSONObject portfolioObject = jsonObject.getJSONObject(PORTFOLIO_URLS);
-			Iterator portfolioKeys = portfolioObject.keys();
-			Map<String, String> portfolioURLs = new HashMap<>();
-
-			while (portfolioKeys.hasNext()) {
-				String currentKey = (String) portfolioKeys.next();
-				portfolioURLs.put(currentKey, portfolioObject.getString(currentKey));
+			try {
+				candidate.setComments(jsonObject.getString(COMMENTS));
+			} catch (JSONException e) {
+				Log.d("JSON_PARSER", "No comments in profile");
 			}
-			candidate.setPortfolioURLs(portfolioURLs);
+			JSONArray jsonArray = jsonObject.getJSONArray(PORTFOLIO_URLS);
+
+			for (int i = 0; i < jsonArray.length(); i++) {
+				candidate.addPortfolioUrl(jsonArray.getString(i));
+			}
 
 
 		} catch (JSONException e) {
