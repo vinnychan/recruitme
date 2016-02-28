@@ -9,7 +9,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class CandidateView extends AppCompatActivity {
 
@@ -22,12 +28,12 @@ public class CandidateView extends AppCompatActivity {
 
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 		fab.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-						.setAction("Action", null).show();
-			}
-		});
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
 		String result = getIntent().getStringExtra("RESULT_TEXT");
 
@@ -40,14 +46,21 @@ public class CandidateView extends AppCompatActivity {
 		TextView linkedin = (TextView) findViewById(R.id.linkedin);
 		TextView resume = (TextView) findViewById(R.id.resume);
 
-		String candiateName = candidate.getFirstName() + "  " + candidate.getLastName();
-		name.setText(candiateName);
+		String candidateName = candidate.getFirstName() + "  " + candidate.getLastName();
+		name.setText(candidateName);
 		title.setText(candidate.getTitle());
 		email.setText(candidate.getEmail());
 		location.setText(candidate.getLocation());
 		linkedin.setText(candidate.getLinkedIn());
 		resume.setText(candidate.getResume());
 
+        ImageView imageView = (ImageView) findViewById(R.id.profilepicture);
+
+        Picasso.with(getApplicationContext())
+                .load(candidate.getPictureURL())
+                .placeholder(R.mipmap.image_placeholder)
+                .error(R.mipmap.image_placeholder)
+                .into(imageView);
 
 		Log.d("CANDIDATE_TEST", candidate.getLinkedIn());
 
