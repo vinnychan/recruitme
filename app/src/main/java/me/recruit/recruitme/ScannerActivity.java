@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.zxing.Result;
 
@@ -43,18 +46,36 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
 		Log.v(TAG, rawResult.getText()); // Prints scan results
 		Log.v(TAG, rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
 
-		Snackbar.make(mScannerView, "QR Code Scanned", Snackbar.LENGTH_INDEFINITE )
-							.setAction("View Profile", new View.OnClickListener() {
-								@Override
-								public void onClick(View v) {
-									Intent intent = new Intent(ScannerActivity.this, CandidateView.class);
-									intent.putExtra("RESULT_TEXT", rawResult.getText());
-									startActivity(intent);
-								}
-							}).show();
+		if (!isJSONValid(rawResult.toString())) {
+			Snackbar.make(mScannerView, "QR Scan failed, please try again", Snackbar.LENGTH_LONG).show();
+		} else {
+
+			Snackbar.make(mScannerView, "QR Code Scanned", Snackbar.LENGTH_INDEFINITE)
+					.setAction("View Profile", new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent intent = new Intent(ScannerActivity.this, CandidateView.class);
+							intent.putExtra("RESULT_TEXT", rawResult.getText());
+							startActivity(intent);
+						}
+					}).show();
+		}
 
 		// If you would like to resume scanning, call this method below:
 		mScannerView.resumeCameraPreview(this);
+	}
+
+	public boolean isJSONValid(String test) {
+		try {
+			new JSONObject(test);
+		} catch (JSONException ex) {
+			try {
+				new JSONArray(test);
+			} catch (JSONException ex1) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 
