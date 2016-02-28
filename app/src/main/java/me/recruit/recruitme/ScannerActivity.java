@@ -44,7 +44,7 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
 		Log.v(TAG, rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
 
 		Snackbar.make(mScannerView, "QR Code Scanned", Snackbar.LENGTH_INDEFINITE )
-							.setAction("Edit", new View.OnClickListener() {
+							.setAction("View Profile", new View.OnClickListener() {
 								@Override
 								public void onClick(View v) {
 									Intent intent = new Intent(ScannerActivity.this, CandidateView.class);
