@@ -6,6 +6,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 public class CandidateView extends AppCompatActivity {
@@ -33,8 +35,33 @@ public class CandidateView extends AppCompatActivity {
 		Log.d("CANDIDATE_TEST", candidate.getLinkedIn());
 
 		Log.d("CANDIDATE_TEST", candidate.getPortfolioURLs().toString());
+	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.candidateview, menu);
+		return true;
+	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+
+		if (id == R.id.action_discard) {
+            finish();
+			return true;
+		}
+        else if (id == R.id.action_save) {
+//            DatabaseUtil dbUtil = new DatabaseUtil(getApplicationContext());
+//            dbUtil.addCandidate(dbUtil.getWritableDatabase(), );
+            finish();
+        }
+
+		return super.onOptionsItemSelected(item);
 	}
 
 }
