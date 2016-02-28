@@ -12,6 +12,14 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.github.scribejava.apis.LinkedInApi20;
+import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.model.OAuthRequest;
+import com.github.scribejava.core.model.Response;
+import com.github.scribejava.core.model.Verb;
+import com.github.scribejava.core.oauth.OAuthService;
+import com.ning.http.client.AsyncHttpClient;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.HttpClient;
@@ -21,7 +29,13 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Calendar;
 
 /**
@@ -45,6 +59,8 @@ public class AuthUtil {
     //These are constants used for build the urls
     private static final String AUTHORIZATION_URL = "https://www.linkedin.com/uas/oauth2/authorization";
     private static final String ACCESS_TOKEN_URL = "https://www.linkedin.com/uas/oauth2/accessToken";
+    private static final String BASIC_INFO_URL = "https://api.linkedin.com/v1/people/~:(email-address)?format=json";
+    private static final String OAUTH_TOKEN_PARAM = "&oauth2_access_token=";
     private static final String SECRET_KEY_PARAM = "client_secret";
     private static final String RESPONSE_TYPE_PARAM = "response_type";
     private static final String GRANT_TYPE_PARAM = "grant_type";
@@ -52,6 +68,7 @@ public class AuthUtil {
     private static final String RESPONSE_TYPE_VALUE ="code";
     private static final String CLIENT_ID_PARAM = "client_id";
     private static final String STATE_PARAM = "state";
+    private static final String SCOPE_PARAM = "scope=r_emailaddress";
     private static final String REDIRECT_URI_PARAM = "redirect_uri";
     /*---------------------------------------*/
     private static final String QUESTION_MARK = "?";
@@ -60,6 +77,7 @@ public class AuthUtil {
 
     public static final String TOKEN_PREFERENCE = "TOKEN";
     public static final String PREFERENCE_EXPIRES = "expires";
+    public static final String EMAIL_PREFERENCE = "EMAIL";
 
     private WebView webView;
     private ProgressDialog pd;
@@ -156,7 +174,30 @@ public class AuthUtil {
                 +QUESTION_MARK+RESPONSE_TYPE_PARAM+EQUALS+RESPONSE_TYPE_VALUE
                 +AMPERSAND+CLIENT_ID_PARAM+EQUALS+API_KEY
                 +AMPERSAND+STATE_PARAM+EQUALS+STATE
-                +AMPERSAND+REDIRECT_URI_PARAM+EQUALS+REDIRECT_URI;
+                +AMPERSAND+REDIRECT_URI_PARAM+EQUALS+REDIRECT_URI
+                +AMPERSAND+SCOPE_PARAM;
+    }
+
+    public static void getEmail(final EmailCallback callback, SharedPreferences preferences) {
+        String accessToken = preferences.getString(TOKEN_PREFERENCE, "");
+        OAuthService service = new ServiceBuilder()
+                                .apiKey(API_KEY)
+                                .apiSecret(SECRET_KEY)
+                                .build(LinkedInApi20.instance());
+
+        final OAuthRequest request = new OAuthRequest(Verb.GET, BASIC_INFO_URL + OAUTH_TOKEN_PARAM + accessToken, service);
+
+        final Response response = request.send();
+        Log.d("AuthUtil", response.getBody());
+        try {
+            JSONObject jsonObject = new JSONObject(response.getBody());
+            SharedPreferences.Editor editor = preferences.edit();
+            String email = jsonObject.getString("emailAddress");
+            editor.putString(EMAIL_PREFERENCE, email);
+            callback.onEmailFetched(email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private class PostRequestAsyncTask extends AsyncTask<String, Void, Boolean> {
@@ -237,4 +278,8 @@ public class AuthUtil {
         }
 
     };
+
+    public interface EmailCallback {
+        public void onEmailFetched(String result);
+    }
 }

@@ -39,14 +39,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String token = preferences.getString(AuthUtil.TOKEN_PREFERENCE, "");
-        if (token.equals("")) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-            token = preferences.getString(AuthUtil.TOKEN_PREFERENCE, "");
-        }
-        Log.d("MainActivity", "Token: " + token);
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
