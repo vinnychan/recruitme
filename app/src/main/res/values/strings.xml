@@ -10,4 +10,5 @@
     <string name="action_discard">Discard candidate</string>
     <string name="action_save">Save candidate</string>
     <string name="action_deletedb">Delete DB</string>
+    <string name="title_activity_login">LoginActivity</string>
 </resources>
