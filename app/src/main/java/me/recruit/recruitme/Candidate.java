@@ -7,7 +7,7 @@ import java.util.List;
 public class Candidate {
 
 	private String firstName;
-		private String lastName;
+	private String lastName;
 	private String title;
 	private String email;
 	private String location;
