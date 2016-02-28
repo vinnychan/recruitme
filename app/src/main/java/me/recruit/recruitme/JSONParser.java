@@ -1,5 +1,7 @@
 package me.recruit.recruitme;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +32,13 @@ public class JSONParser {
 			candidate.setLocation(jsonObject.getString(LOCATION));
 			candidate.setResume(jsonObject.getString(RESUME));
 			candidate.setLinkedIn(jsonObject.getString(LINKEDIN));
-			candidate.setPictureURL(jsonObject.getString(PICTURE_URL));
+
+			try {
+				candidate.setPictureURL(jsonObject.getString(PICTURE_URL));
+			}  catch (JSONException e) {
+//				candidate.setPictureURL("http://augustyniakteam.com/wp-content/uploads/2015/01/Default_User.png");
+				Log.d("JSON_PARSER", "No image URL provided");
+			}
 
 			JSONArray jsonArray = jsonObject.getJSONArray(PORTFOLIO_URLS);
 
