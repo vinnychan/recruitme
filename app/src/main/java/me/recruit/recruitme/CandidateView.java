@@ -21,7 +21,7 @@ import org.json.JSONObject;
 
 public class CandidateView extends AppCompatActivity {
     private Candidate candidate = null;
-    private String candidateId = "";
+    private String candidateId = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +107,7 @@ public class CandidateView extends AppCompatActivity {
             candidate.setComments(comments.getText().toString());
             String candidateJSON = candidate.toBaseString();
             DatabaseUtil dbUtil = new DatabaseUtil(getApplicationContext());
-            if (!candidateId.equals("")) {
+            if (candidateId != null) {
                 dbUtil.updateCandidate(dbUtil.getWritableDatabase(), candidateId, candidateJSON);
             }
             else {

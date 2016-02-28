@@ -4,7 +4,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Candidate {
@@ -16,8 +18,9 @@ public class Candidate {
 	private String location;
 	private String resume;
 	private String linkedIn;
-	private List<String> portfolioURLs;
+	private Map<String, String> portfolioURLs;
 	private String pictureURL;
+	private String comments = "";
 
 	public String getComments() {
 		return comments;
@@ -27,10 +30,9 @@ public class Candidate {
 		this.comments = comments;
 	}
 
-	private String comments;
 
 	public Candidate() {
-		portfolioURLs = new ArrayList<>();
+		portfolioURLs = new HashMap<>();
 	}
 
 	public String getTitle() {
@@ -65,12 +67,12 @@ public class Candidate {
 		this.linkedIn = linkedIn;
 	}
 
-	public List<String> getPortfolioURLs() {
+	public Map<String, String> getPortfolioURLs() {
 		return portfolioURLs;
 	}
 
-	public void setPortfolioURLs(List<String> profolioURLs) {
-		this.portfolioURLs = profolioURLs;
+	public void setPortfolioURLs(Map<String, String> portfolioURLs) {
+		this.portfolioURLs = portfolioURLs;
 	}
 
 	public String getPictureURL() {
@@ -79,10 +81,6 @@ public class Candidate {
 
 	public void setPictureURL(String pictureURL) {
 		this.pictureURL = pictureURL;
-	}
-
-	public void addPortfolioUrl(String portfolioURL) {
-		this.portfolioURLs.add(portfolioURL);
 	}
 
 	public void setEmail(String email) {
@@ -118,7 +116,7 @@ public class Candidate {
 			candidateJSON.put(JSONParser.LOCATION, location);
 			candidateJSON.put(JSONParser.RESUME, resume);
 			candidateJSON.put(JSONParser.LINKEDIN, linkedIn);
-			candidateJSON.put(JSONParser.PORTFOLIO_URLS, portfolioURLs);
+			candidateJSON.put(JSONParser.PORTFOLIO_URLS, new JSONObject(portfolioURLs));
 			candidateJSON.put(JSONParser.PICTURE_URL, pictureURL);
 			candidateJSON.put(JSONParser.COMMENTS, comments);
 

@@ -2,9 +2,12 @@ package me.recruit.recruitme;
 
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class JSONParser {
 
@@ -27,7 +30,7 @@ public class JSONParser {
 			JSONObject jsonObject = new JSONObject(input);
 			candidate.setFirstName(jsonObject.getString(FIRST_NAME));
 			candidate.setLastName(jsonObject.getString(LAST_NAME));
-			candidate.setTitle( jsonObject.getString(TITLE));
+			candidate.setTitle(jsonObject.getString(TITLE));
 			candidate.setEmail(jsonObject.getString(EMAIL));
 			candidate.setLocation(jsonObject.getString(LOCATION));
 			candidate.setResume(jsonObject.getString(RESUME));
@@ -41,11 +44,15 @@ public class JSONParser {
 			}
 			candidate.setComments(jsonObject.getString(COMMENTS));
 
-			JSONArray jsonArray = jsonObject.getJSONArray(PORTFOLIO_URLS);
+			JSONObject portfolioObject = jsonObject.getJSONObject(PORTFOLIO_URLS);
+			Iterator portfolioKeys = portfolioObject.keys();
+			Map<String, String> portfolioURLs = new HashMap<>();
 
-			for (int i = 0; i < jsonArray.length(); i++) {
-				candidate.addPortfolioUrl(jsonArray.getString(i));
+			while (portfolioKeys.hasNext()) {
+				String currentKey = (String) portfolioKeys.next();
+				portfolioURLs.put(currentKey, portfolioObject.getString(currentKey));
 			}
+			candidate.setPortfolioURLs(portfolioURLs);
 
 
 		} catch (JSONException e) {

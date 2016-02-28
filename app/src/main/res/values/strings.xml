@@ -9,4 +9,5 @@
     <string name="title_activity_candidate_view">CandidateView</string>
     <string name="action_discard">Discard candidate</string>
     <string name="action_save">Save candidate</string>
+    <string name="action_deletedb">Delete DB</string>
 </resources>

@@ -104,4 +104,9 @@ public class DatabaseUtil extends SQLiteOpenHelper{
         String statement = UPDATE_CANDIDATE_PREFIX + "\'" + candidateJSON + "\'" + UPDATE_CANDIDATE_SUFFIX + candidateId;
         db.execSQL(statement);
     }
+
+    public void deleteDb(SQLiteDatabase db, Context context) {
+        db.close();
+        context.deleteDatabase(DATABASE_NAME);
+    }
 }

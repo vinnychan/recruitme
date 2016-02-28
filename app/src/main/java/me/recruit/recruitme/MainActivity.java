@@ -110,6 +110,10 @@ public class MainActivity extends AppCompatActivity
             new CallAPI().execute(testURL);
             return true;
         }
+        else if (id == R.id.action_deletedb) {
+            DatabaseUtil dbUtil = new DatabaseUtil(getApplicationContext());
+            dbUtil.deleteDb(dbUtil.getWritableDatabase(), getApplicationContext());
+        }
 
         return super.onOptionsItemSelected(item);
     }

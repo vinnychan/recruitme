@@ -7,4 +7,10 @@
         android:title="@string/action_api"
         android:icon="@drawable/ic_menu_send"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_deletedb"
+        android:orderInCategory="100"
+        android:title="@string/action_deletedb"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="ifRoom" />
 </menu>
