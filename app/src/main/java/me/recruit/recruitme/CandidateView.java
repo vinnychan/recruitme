@@ -22,7 +22,7 @@ import org.json.JSONObject;
 public class CandidateView extends AppCompatActivity {
     private Candidate candidate = null;
 
-    private String candidateId = "";
+    private String candidateId = null;
 	private String candidateString;
 
 	@Override
@@ -103,7 +103,6 @@ public class CandidateView extends AppCompatActivity {
             EditText comments = (EditText) findViewById(R.id.comments);
             candidate.setComments(comments.getText().toString());
             String candidateJSON = candidate.toBaseString();
-
             DatabaseUtil dbUtil = new DatabaseUtil(getApplicationContext());
             if (candidateId != null) {
                 dbUtil.updateCandidate(dbUtil.getWritableDatabase(), candidateId, candidateJSON);
