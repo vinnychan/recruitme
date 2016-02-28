@@ -21,7 +21,9 @@ import java.io.InputStreamReader;
 
 public class HTTPUrlConnection {
 
-	public static void sendJson(final JSONObject json, final String URL) {
+	private static final String POST_URL = "http://justchooseme.azurewebsites.net/candidate/add";
+
+	public static void sendJson(final JSONObject json) {
 		Thread t = new Thread() {
 
 			public void run() {
@@ -31,7 +33,7 @@ public class HTTPUrlConnection {
 				HttpResponse response;
 
 				try {
-					HttpPost post = new HttpPost(URL);
+					HttpPost post = new HttpPost(POST_URL);
 
 					StringEntity se = new StringEntity( json.toString());
 					se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
