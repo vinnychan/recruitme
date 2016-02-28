@@ -31,6 +31,7 @@ public class JSONParser {
 			candidate.setResume(jsonObject.getString(RESUME));
 			candidate.setLinkedIn(jsonObject.getString(LINKEDIN));
 			candidate.setPictureURL(jsonObject.getString(PICTURE_URL));
+			candidate.setComments(jsonObject.getString(COMMENTS));
 
 			JSONArray jsonArray = jsonObject.getJSONArray(PORTFOLIO_URLS);
 

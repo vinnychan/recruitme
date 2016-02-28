@@ -59,16 +59,23 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setLayoutManager(llm);
 
         dbUtil = new DatabaseUtil(getApplicationContext());
-        List<String> candidateList = dbUtil.getCandidatesList(dbUtil.getReadableDatabase());
+        List[] candidateLists = dbUtil.getCandidatesList(dbUtil.getReadableDatabase());
+        final List<String> candidateList = candidateLists[0];
+        final List<String> candidateIds = candidateLists[1];
 
-        View.OnClickListener cardOnClickListener = new View.OnClickListener() {
+        CardCallback cardCallback = new CardCallback() {
             @Override
-            public void onClick(View view) {
-                TextView name = (TextView) view.findViewById(R.id.cardName);
-                Snackbar.make(view, name.getText().toString(), Snackbar.LENGTH_LONG);
+            public void onClick(View view, int position) {
+                String candidateJSON = candidateList.get(position);
+                String candidateId = candidateIds.get(position);
+                Intent intent = new Intent(MainActivity.this, CandidateView.class);
+                intent.putExtra("RESULT_TEXT", candidateJSON);
+                intent.putExtra("ID", candidateId);
+                startActivity(intent);
             }
         };
-        CandidateAdapter candidateAdapter = new CandidateAdapter(candidateList, getApplicationContext(), cardOnClickListener);
+
+        CandidateAdapter candidateAdapter = new CandidateAdapter(candidateList, getApplicationContext(), cardCallback);
         recyclerView.setAdapter(candidateAdapter);
     }
 
@@ -135,5 +142,23 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        List[] candidateLists = dbUtil.getCandidatesList(dbUtil.getReadableDatabase());
+        final List<String> candidateList = candidateLists[0];
+        final List<String> candidateIds = candidateLists[1];
+
+        CardCallback cardCallback = new CardCallback() {
+            @Override
+            public void onClick(View view, int position) {
+                String candidateJSON = candidateList.get(position);
+                String candidateId = candidateIds.get(position);
+                Intent intent = new Intent(MainActivity.this, CandidateView.class);
+                intent.putExtra("RESULT_TEXT", candidateJSON);
+                intent.putExtra("ID", candidateId);
+                startActivity(intent);
+            }
+        };
+
+        CandidateAdapter candidateAdapter = new CandidateAdapter(candidateList, getApplicationContext(), cardCallback);
+        recyclerView.setAdapter(candidateAdapter);
     }
 }

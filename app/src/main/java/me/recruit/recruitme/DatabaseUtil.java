@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by AlexLand on 2016-02-27.
@@ -36,6 +37,13 @@ public class DatabaseUtil extends SQLiteOpenHelper{
             + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_CANDIDATE_JSON + " text"
             + ");";
+
+    private static final String UPDATE_CANDIDATE_PREFIX = "UPDATE "
+            + TABLE_CANDIDATES + " SET "
+            + COLUMN_CANDIDATE_JSON + " = ";
+
+    private static final String UPDATE_CANDIDATE_SUFFIX = " WHERE "
+            + COLUMN_ID + " = ";
 
     private static final String GET_ALL_CANDIDATES = "SELECT * FROM " + TABLE_CANDIDATES;
 
@@ -75,17 +83,25 @@ public class DatabaseUtil extends SQLiteOpenHelper{
         Log.i("DatabaseUtil", statement);
     }
 
-    public List<String> getCandidatesList(SQLiteDatabase db) {
+    public List[] getCandidatesList(SQLiteDatabase db) {
         List<String> candidateList = new ArrayList<>();
+        List<String> candidateListIds = new ArrayList<>();
         String statement = GET_ALL_CANDIDATES;
         Cursor cursor = db.rawQuery(statement, null);
         if (cursor.moveToFirst()) {
             while (cursor.isAfterLast() == false) {
                 String candidateJSON = cursor.getString(cursor.getColumnIndex(COLUMN_CANDIDATE_JSON));
                 candidateList.add(candidateJSON);
+                String candidateId = cursor.getString(cursor.getColumnIndex(COLUMN_ID));
+                candidateListIds.add(candidateId);
                 cursor.moveToNext();
             }
         }
-        return candidateList;
+        return new List[] {candidateList, candidateListIds};
+    }
+
+    public void updateCandidate(SQLiteDatabase db, String candidateId, String candidateJSON) {
+        String statement = UPDATE_CANDIDATE_PREFIX + "\'" + candidateJSON + "\'" + UPDATE_CANDIDATE_SUFFIX + candidateId;
+        db.execSQL(statement);
     }
 }

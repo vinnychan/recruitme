@@ -18,12 +18,12 @@ import java.util.List;
 public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.CandidateViewHolder>{
     private List<String> candidateList;
     private Context context;
-    private View.OnClickListener onClickListener;
+    private CardCallback cardCallback;
 
-    public CandidateAdapter(List<String> candidateList, Context context, View.OnClickListener onClickListener) {
+    public CandidateAdapter(List<String> candidateList, Context context, CardCallback cardCallback) {
         this.candidateList = candidateList;
         this.context = context;
-        this.onClickListener = onClickListener;
+        this.cardCallback = cardCallback;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.Cand
     }
 
     @Override
-    public void onBindViewHolder(CandidateViewHolder holder, int position) {
+    public void onBindViewHolder(CandidateViewHolder holder, final int position) {
         Candidate candidate = JSONParser.parse(candidateList.get(position));
         holder.name.setText(candidate.getName());
         holder.title.setText(candidate.getTitle());
@@ -44,6 +44,12 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.Cand
                 .error(R.mipmap.image_placeholder)
                 .into(holder.profilePicture);
 
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cardCallback.onClick(view, position);
+            }
+        });
     }
 
     @Override
@@ -55,13 +61,14 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.Cand
         private ImageView profilePicture;
         private TextView name;
         private TextView title;
+        private View view;
 
         public CandidateViewHolder(View itemView) {
             super(itemView);
+            view = itemView;
             profilePicture = (ImageView) itemView.findViewById(R.id.cardPicture);
             name = (TextView) itemView.findViewById(R.id.cardName);
             title = (TextView) itemView.findViewById(R.id.cardTitle);
-            itemView.setOnClickListener(onClickListener);
         }
     }
 }

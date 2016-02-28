@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 public class CandidateView extends AppCompatActivity {
     private Candidate candidate = null;
+    private String candidateId = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class CandidateView extends AppCompatActivity {
         });
 
 		String result = getIntent().getStringExtra("RESULT_TEXT");
+        candidateId = getIntent().getStringExtra("ID");
 
         candidate = JSONParser.parse(result);
 
@@ -44,6 +46,7 @@ public class CandidateView extends AppCompatActivity {
 		TextView email = (TextView) findViewById(R.id.email);
 		TextView linkedin = (TextView) findViewById(R.id.linkedin);
 		TextView resume = (TextView) findViewById(R.id.resume);
+        EditText comments = (EditText) findViewById(R.id.comments);
 
 		String candidateName = candidate.getFirstName() + "  " + candidate.getLastName();
 		name.setText(candidateName);
@@ -61,10 +64,13 @@ public class CandidateView extends AppCompatActivity {
                 .error(R.mipmap.image_placeholder)
                 .into(imageView);
 
-		Log.d("CANDIDATE_TEST", candidate.getLinkedIn());
+        String commentsString = candidate.getComments();
+        if (!commentsString.equals("")) {
+            comments.setText(commentsString);
+        }
 
-		Log.d("CANDIDATE_TEST", candidate.getPortfolioURLs().toString());
-	}
+		Log.d("COMMENTS", commentsString);
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,7 +95,12 @@ public class CandidateView extends AppCompatActivity {
             candidate.setComments(comments.getText().toString());
             String candidateJSON = candidate.toBaseString();
             DatabaseUtil dbUtil = new DatabaseUtil(getApplicationContext());
-            dbUtil.addCandidate(dbUtil.getWritableDatabase(), candidateJSON);
+            if (!candidateId.equals("")) {
+                dbUtil.updateCandidate(dbUtil.getWritableDatabase(), candidateId, candidateJSON);
+            }
+            else {
+                dbUtil.addCandidate(dbUtil.getWritableDatabase(), candidateJSON);
+            }
             finish();
         }
 
