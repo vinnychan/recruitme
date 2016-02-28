@@ -13,6 +13,7 @@ public class JSONParser {
 		Candidate candidate = new Candidate();
 		try {
 			JSONObject jsonObject = new JSONObject(input);
+			candidate.setName(jsonObject.getString("name"));
 			candidate.setTitle( jsonObject.getString("title"));
 			candidate.setLocation(jsonObject.getString("location"));
 			candidate.setResume(jsonObject.getString("resume"));

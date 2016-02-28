@@ -5,6 +5,8 @@ import java.util.List;
 
 
 public class Candidate {
+
+	private String name;
 	private String title;
 	private String location;
 	private String resume;
@@ -14,6 +16,14 @@ public class Candidate {
 
 	public Candidate() {
 		portfolioURLs = new ArrayList<>();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getTitle() {
