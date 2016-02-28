@@ -1,6 +1,7 @@
 package me.recruit.recruitme;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,9 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         WebView webView = (WebView) findViewById(R.id.loginWebView);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         AuthUtil authUtil = new AuthUtil(webView);
         authUtil.doAuth(LoginActivity.this, new LoginCallback() {

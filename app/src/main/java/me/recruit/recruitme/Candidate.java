@@ -81,6 +81,9 @@ public class Candidate {
 	}
 
 	public String getPictureURL() {
+		if (pictureURL.equals("")) {
+			return "http://localhost";
+		}
 		return pictureURL;
 	}
 
