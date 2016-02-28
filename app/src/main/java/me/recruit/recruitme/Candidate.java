@@ -1,5 +1,6 @@
 package me.recruit.recruitme;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,7 +19,7 @@ public class Candidate {
 	private String location;
 	private String resume;
 	private String linkedIn;
-	private Map<String, String> portfolioURLs;
+	private List<String> portfolioURLs;
 	private String pictureURL;
 	private String comments = "";
 
@@ -32,7 +33,7 @@ public class Candidate {
 
 
 	public Candidate() {
-		portfolioURLs = new HashMap<>();
+		portfolioURLs = new ArrayList<>();
 	}
 
 	public String getTitle() {
@@ -67,11 +68,15 @@ public class Candidate {
 		this.linkedIn = linkedIn;
 	}
 
-	public Map<String, String> getPortfolioURLs() {
+	public List<String> getPortfolioURLs() {
 		return portfolioURLs;
 	}
 
-	public void setPortfolioURLs(Map<String, String> portfolioURLs) {
+	public void addPortfolioUrl(String portfolioURL) {
+				this.portfolioURLs.add(portfolioURL);
+	}
+
+	public void setPortfolioURLs(List<String> portfolioURLs) {
 		this.portfolioURLs = portfolioURLs;
 	}
 
@@ -108,6 +113,8 @@ public class Candidate {
 
 	public String toBaseString() {
 		JSONObject candidateJSON = new JSONObject();
+		JSONArray portfolioJSONArray = new JSONArray(portfolioURLs);
+
 		try {
 			candidateJSON.put(JSONParser.FIRST_NAME, firstName);
 			candidateJSON.put(JSONParser.LAST_NAME, lastName);
@@ -116,7 +123,7 @@ public class Candidate {
 			candidateJSON.put(JSONParser.LOCATION, location);
 			candidateJSON.put(JSONParser.RESUME, resume);
 			candidateJSON.put(JSONParser.LINKEDIN, linkedIn);
-			candidateJSON.put(JSONParser.PORTFOLIO_URLS, new JSONObject(portfolioURLs));
+			candidateJSON.put(JSONParser.PORTFOLIO_URLS, portfolioJSONArray);
 			candidateJSON.put(JSONParser.PICTURE_URL, pictureURL);
 			candidateJSON.put(JSONParser.COMMENTS, comments);
 
