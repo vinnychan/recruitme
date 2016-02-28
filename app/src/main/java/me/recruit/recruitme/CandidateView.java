@@ -36,11 +36,14 @@ public class CandidateView extends AppCompatActivity {
 		TextView name = (TextView) findViewById(R.id.name);
 		TextView title = (TextView) findViewById(R.id.title);
 		TextView location = (TextView) findViewById(R.id.location);
+		TextView email = (TextView) findViewById(R.id.email);
 		TextView linkedin = (TextView) findViewById(R.id.linkedin);
 		TextView resume = (TextView) findViewById(R.id.resume);
 
-		name.setText(candidate.getName());
+		String candiateName = candidate.getFirstName() + "  " + candidate.getLastName();
+		name.setText(candiateName);
 		title.setText(candidate.getTitle());
+		email.setText(candidate.getEmail());
 		location.setText(candidate.getLocation());
 		linkedin.setText(candidate.getLinkedIn());
 		resume.setText(candidate.getResume());
