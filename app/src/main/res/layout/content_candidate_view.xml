@@ -51,14 +51,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/location"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:autoLink="web"/>
 
     <TextView
         android:id = "@+id/resume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/linkedin"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:autoLink="web"/>
 
 
 
