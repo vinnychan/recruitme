@@ -24,8 +24,8 @@ import java.util.List;
 
 public class HTTPUrlConnection {
 
-	private static final String POST_URL = "http://justchooseme.azurewebsites.net/candidate/add";
-	private static final String GET_ALL_URL = "http://justchooseme.azurewebsites.net/candidate/listArray";
+	private static final String POST_URL = "http://justchooseme.azurewebsites.net/candidate/blah@blah.com/add";
+	private static final String GET_ALL_URL = "http://justchooseme.azurewebsites.net/candidate/blah@blah.com/listArray";
 
 	private static final String USER_AGENT = "Mozilla/5.0";
 
