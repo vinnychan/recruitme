@@ -6,8 +6,10 @@ import java.util.List;
 
 public class Candidate {
 
-	private String name;
+	private String firstName;
+		private String lastName;
 	private String title;
+	private String email;
 	private String location;
 	private String resume;
 	private String linkedIn;
@@ -16,14 +18,6 @@ public class Candidate {
 
 	public Candidate() {
 		portfolioURLs = new ArrayList<>();
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getTitle() {
@@ -77,4 +71,28 @@ public class Candidate {
 	public void addPortfolioUrl(String portfolioURL) {
 		this.portfolioURLs.add(portfolioURL);
 	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getEmail() {
+		return this.email;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
 }
