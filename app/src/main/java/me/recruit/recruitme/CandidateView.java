@@ -18,6 +18,8 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 
 public class CandidateView extends AppCompatActivity {
     private Candidate candidate = null;
@@ -55,29 +57,24 @@ public class CandidateView extends AppCompatActivity {
 		TextView email = (TextView) findViewById(R.id.email);
 		TextView linkedin = (TextView) findViewById(R.id.linkedin);
 		TextView resume = (TextView) findViewById(R.id.resume);
-		TextView portfolio = (TextView) findViewById(R.id.resume);
-//		TextView url1 = (TextView) findViewById(R.id.url1);
-//		TextView url2 = (TextView) findViewById(R.id.url2);
-//		TextView url3 = (TextView) findViewById(R.id.url3);
+		TextView portfolio = (TextView) findViewById(R.id.portfolio);
+		TextView url1 = (TextView) findViewById(R.id.url1);
+		TextView url2 = (TextView) findViewById(R.id.url2);
+		TextView url3 = (TextView) findViewById(R.id.url3);
         EditText comments = (EditText) findViewById(R.id.comments);
 
 		String candidateName = candidate.getFirstName() + "  " + candidate.getLastName();
 		name.setText(candidateName);
 		title.setText(candidate.getTitle());
 		email.setText(candidate.getEmail());
-		location.setText(candidate.getLocation());
+		location.setText("Location: " + candidate.getLocation());
 		linkedin.setText(candidate.getLinkedIn());
-		resume.setText(candidate.getResume());
+		resume.setText("Resume: " + candidate.getResume());
 		portfolio.setText("Portfolio:");
 
-		for (int i = 1; i < candidate.getPortfolioURLs().size() + 1; i++) {
-			String urlString = "url"+i;
-			int id = getResources().getIdentifier(urlString, "id", getPackageName());
-			if (id != 0) {
-				TextView textView = (TextView) findViewById(id);
-				textView.setText(candidate.getPortfolioURLs().get(i-1));
-			}
-		}
+		url1.setText(getOrElse(candidate.getPortfolioURLs(), 0));
+		url2.setText(getOrElse(candidate.getPortfolioURLs(), 1));
+		url3.setText(getOrElse(candidate.getPortfolioURLs(), 2));
 
         ImageView imageView = (ImageView) findViewById(R.id.profilepicture);
 
@@ -137,6 +134,14 @@ public class CandidateView extends AppCompatActivity {
         }
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	private String getOrElse(List<String> list, int i) {
+		try {
+			return list.get(i);
+		} catch (Exception e) {
+			return "";
+		}
 	}
 
 }
