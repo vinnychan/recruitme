@@ -22,7 +22,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.io.IOException;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -39,8 +39,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(intent);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String email = preferences.getString(AuthUtil.EMAIL_PREFERENCE, "");
+        if (email.equals("")) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -67,24 +72,7 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setLayoutManager(llm);
 
         dbUtil = new DatabaseUtil(getApplicationContext());
-        List[] candidateLists = dbUtil.getCandidatesList(dbUtil.getReadableDatabase());
-        final List<String> candidateList = candidateLists[0];
-        final List<String> candidateIds = candidateLists[1];
-
-        CardCallback cardCallback = new CardCallback() {
-            @Override
-            public void onClick(View view, int position) {
-                String candidateJSON = candidateList.get(position);
-                String candidateId = candidateIds.get(position);
-                Intent intent = new Intent(MainActivity.this, CandidateView.class);
-                intent.putExtra("RESULT_TEXT", candidateJSON);
-                intent.putExtra("ID", candidateId);
-                startActivity(intent);
-            }
-        };
-
-        CandidateAdapter candidateAdapter = new CandidateAdapter(candidateList, getApplicationContext(), cardCallback);
-        recyclerView.setAdapter(candidateAdapter);
+        updateCandidateList();
 
 
 
@@ -168,6 +156,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        updateCandidateList();
+    }
+
+    public void updateCandidateList() {
         List[] candidateLists = dbUtil.getCandidatesList(dbUtil.getReadableDatabase());
         final List<String> candidateList = candidateLists[0];
         final List<String> candidateIds = candidateLists[1];

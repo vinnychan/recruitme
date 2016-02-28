@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onEmailFetched(String result) {
                         Log.d("LoginActivity", "Email: " + result);
+
                     }
                 }, preferences);
                 finish();

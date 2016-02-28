@@ -24,12 +24,14 @@ import java.util.List;
 
 public class HTTPUrlConnection {
 
-	private static final String POST_URL = "http://justchooseme.azurewebsites.net/candidate/blah@blah.com/add";
-	private static final String GET_ALL_URL = "http://justchooseme.azurewebsites.net/candidate/blah@blah.com/listArray";
+	private static final String POST_URL_PREFIX = "http://justchooseme.azurewebsites.net/candidate/";
+	private static final String POST_URL_SUFFIX = "/add";
+	private static final String GET_ALL_URL_PREFIX = "http://justchooseme.azurewebsites.net/candidate/";
+	private static final String GET_ALL_URL_SUFFIX = "/listArray";
 
 	private static final String USER_AGENT = "Mozilla/5.0";
 
-	public static void sendJson(final JSONObject json) {
+	public static void sendJson(final JSONObject json, final String email) {
 		Thread t = new Thread() {
 
 			public void run() {
@@ -39,7 +41,7 @@ public class HTTPUrlConnection {
 				HttpResponse response;
 
 				try {
-					HttpPost post = new HttpPost(POST_URL);
+					HttpPost post = new HttpPost(POST_URL_PREFIX + email + POST_URL_SUFFIX);
 
 					StringEntity se = new StringEntity( json.toString());
 					se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
@@ -67,8 +69,8 @@ public class HTTPUrlConnection {
 		t.start();
 	}
 
-	public static String getAllRequest( ) throws IOException {
-		URL url = new URL(GET_ALL_URL);
+	public static String getAllRequest(String email) throws IOException {
+		URL url = new URL(GET_ALL_URL_PREFIX + email + GET_ALL_URL_SUFFIX);
 		HttpURLConnection client = (HttpURLConnection) url.openConnection();
 		InputStream in = client.getInputStream();
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -77,9 +79,9 @@ public class HTTPUrlConnection {
 		return returnString;
 	}
 
-	public static String sendGet() throws Exception {
+	public static String sendGet(String email) throws Exception {
 
-		URL obj = new URL(GET_ALL_URL);
+		URL obj = new URL(GET_ALL_URL_PREFIX + email + GET_ALL_URL_SUFFIX);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
 		// optional default is GET
@@ -89,7 +91,7 @@ public class HTTPUrlConnection {
 		con.setRequestProperty("User-Agent", USER_AGENT);
 
 		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + GET_ALL_URL);
+		System.out.println("\nSending 'GET' request to URL : " + GET_ALL_URL_PREFIX + email + GET_ALL_URL_SUFFIX);
 		System.out.println("Response Code : " + responseCode);
 
 		BufferedReader in = new BufferedReader(
