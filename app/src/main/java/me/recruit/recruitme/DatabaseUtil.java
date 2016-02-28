@@ -1,10 +1,12 @@
 package me.recruit.recruitme;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.IOException;
@@ -48,8 +50,12 @@ public class DatabaseUtil extends SQLiteOpenHelper{
 
     private static final String GET_ALL_CANDIDATES = "SELECT * FROM " + TABLE_CANDIDATES;
 
+    private String candidateEmail;
+
     public DatabaseUtil(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        candidateEmail = preferences.getString(AuthUtil.EMAIL_PREFERENCE, "");
     }
 
     @Override
@@ -91,7 +97,7 @@ public class DatabaseUtil extends SQLiteOpenHelper{
 		List<String> candidateListId = new ArrayList<>();
 
 		try {
-			candidateJSONString = HTTPUrlConnection.sendGet();
+			candidateJSONString = HTTPUrlConnection.sendGet(candidateEmail);
 			candidateList = JSONParser.parseCandidateList(candidateJSONString);
 			candidateListId = JSONParser.parseCandidateIdList(candidateJSONString);
 		} catch (Exception e) {

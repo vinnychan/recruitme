@@ -1,5 +1,6 @@
 package me.recruit.recruitme;
 
+import android.os.AsyncTask;
 import android.os.Looper;
 import android.util.Log;
 
@@ -79,8 +80,7 @@ public class HTTPUrlConnection {
 		return returnString;
 	}
 
-	public static String sendGet(String email) throws Exception {
-
+	public static String sendGet(final String email) throws Exception {
 		URL obj = new URL(GET_ALL_URL_PREFIX + email + GET_ALL_URL_SUFFIX);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -106,7 +106,6 @@ public class HTTPUrlConnection {
 
 		//print result
 		return response.toString();
-
 	}
 
 

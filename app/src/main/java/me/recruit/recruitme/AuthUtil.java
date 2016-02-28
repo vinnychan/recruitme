@@ -194,6 +194,7 @@ public class AuthUtil {
             SharedPreferences.Editor editor = preferences.edit();
             String email = jsonObject.getString("emailAddress");
             editor.putString(EMAIL_PREFERENCE, email);
+            editor.commit();
             callback.onEmailFetched(email);
         } catch (JSONException e) {
             e.printStackTrace();
