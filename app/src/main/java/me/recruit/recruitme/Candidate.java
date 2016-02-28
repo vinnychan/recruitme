@@ -1,9 +1,11 @@
 package me.recruit.recruitme;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -27,7 +29,7 @@ public class Candidate {
 		this.comments = comments;
 	}
 
-	private String comments;
+	private String comments = "";
 
 	public Candidate() {
 		portfolioURLs = new ArrayList<>();
@@ -110,6 +112,10 @@ public class Candidate {
 
 	public String toBaseString() {
 		JSONObject candidateJSON = new JSONObject();
+		JSONArray portfolioJSONArray = new JSONArray(portfolioURLs);
+
+
+
 		try {
 			candidateJSON.put(JSONParser.FIRST_NAME, firstName);
 			candidateJSON.put(JSONParser.LAST_NAME, lastName);
@@ -118,7 +124,7 @@ public class Candidate {
 			candidateJSON.put(JSONParser.LOCATION, location);
 			candidateJSON.put(JSONParser.RESUME, resume);
 			candidateJSON.put(JSONParser.LINKEDIN, linkedIn);
-			candidateJSON.put(JSONParser.PORTFOLIO_URLS, portfolioURLs);
+			candidateJSON.put(JSONParser.PORTFOLIO_URLS, portfolioJSONArray);
 			candidateJSON.put(JSONParser.PICTURE_URL, pictureURL);
 			candidateJSON.put(JSONParser.COMMENTS, comments);
 

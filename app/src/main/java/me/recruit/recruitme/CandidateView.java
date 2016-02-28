@@ -21,7 +21,9 @@ import org.json.JSONObject;
 
 public class CandidateView extends AppCompatActivity {
     private Candidate candidate = null;
+
     private String candidateId = "";
+	private String candidateString;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +41,13 @@ public class CandidateView extends AppCompatActivity {
             }
         });
 
-		String result = getIntent().getStringExtra("RESULT_TEXT");
         candidateId = getIntent().getStringExtra("ID");
 
-        candidate = JSONParser.parse(result);
 
-		try {
-			JSONObject resultJson = new JSONObject(result);
-			HTTPUrlConnection.sendJson(resultJson, "http://justchooseme.azurewebsites.net/candidate/add");
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
 
+		candidateString = getIntent().getStringExtra("RESULT_TEXT");
+
+        candidate = JSONParser.parse(candidateString);
 
 		TextView name = (TextView) findViewById(R.id.cardName);
 		TextView title = (TextView) findViewById(R.id.cardTitle);
@@ -106,13 +103,23 @@ public class CandidateView extends AppCompatActivity {
             EditText comments = (EditText) findViewById(R.id.comments);
             candidate.setComments(comments.getText().toString());
             String candidateJSON = candidate.toBaseString();
+
             DatabaseUtil dbUtil = new DatabaseUtil(getApplicationContext());
-            if (!candidateId.equals("")) {
+            if (candidateId != null) {
                 dbUtil.updateCandidate(dbUtil.getWritableDatabase(), candidateId, candidateJSON);
             }
             else {
                 dbUtil.addCandidate(dbUtil.getWritableDatabase(), candidateJSON);
             }
+
+			// Post to remote DB
+			try {
+				JSONObject resultJson = new JSONObject(candidateJSON);
+				HTTPUrlConnection.sendJson(resultJson);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
             finish();
         }
 
